@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meshy - Share Model</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== Design Tokens ===== */
+    :root {
+      /* Backgrounds */
+      --bg-strong: #0e0e0e;
+      --bg-base: #181818;
+      --bg-sub: #1e1e1e;
+      --bg-base-hover: #262626;
+      --bg-shade: #303030;
+      --bg-border: #3f3f3f;
+      --bg-border-strong: #4f4f4f;
+      --bg-translucent: rgba(255,255,255,0.05);
+      --bg-translucent-strong: rgba(255,255,255,0.10);
+
+      /* Labels */
+      --label-title: #ffffff;
+      --label-base: #dedede;
+      --label-soft: #9b9b9b;
+      --label-muted: #696969;
+      --label-faint: #505050;
+      --label-placeholder: rgba(255,255,255,0.20);
+
+      /* Accent */
+      --accent-base: #c5f955;
+      --accent-base-hover: #a8e328;
+      --accent-highlight: #dcfa9d;
+      --accent-bg: rgba(197,249,85,0.15);
+      --accent-label: #000000;
+
+      /* Support accent */
+      --accent-support-base: #ff3e8f;
+      --accent-support-highlight: #ff97c2;
+
+      /* Semantic */
+      --semantic-warning-highlight: #f5ad57;
+      --semantic-warning-base: #f6992b;
+      --semantic-success-base: #2ee040;
+
+      /* Gradients */
+      --gradient-credit: linear-gradient(90deg, #f9e855 0%, #e99430 100%);
+      --gradient-new-feature: linear-gradient(90deg, #c5f955 0%, #ff97c2 100%);
+
+      /* Shadows */
+      --shadow-md: 0 8px 16px rgba(0,0,0,0.2), 0px 2px 12px rgba(0,0,0,0.12);
+      --shadow-lg: 0 12px 24px rgba(0,0,0,0.2), 0px 4px 16px rgba(0,0,0,0.12);
+
+      /* Spacing */
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 0.75rem;
+      --spacing-lg: 1rem;
+      --spacing-xl: 1.25rem;
+      --spacing-2xl: 1.5rem;
+
+      /* Radius */
+      --rounded-sm: 4px;
+      --rounded-md: 6px;
+      --rounded-lg: 8px;
+      --rounded-xl: 12px;
+      --rounded-2xl: 16px;
+      --rounded-3xl: 24px;
+      --rounded-full: 999px;
+
+      /* Animation */
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* ===== Reset ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg-strong);
+      color: var(--label-base);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ===== Layout ===== */
+    .app {
+      display: grid;
+      grid-template-rows: 56px 1fr;
+      grid-template-columns: 56px 320px 1fr 320px;
+      height: 100vh;
+    }
+
+    /* ===== Top Nav ===== */
+    .topnav {
+      grid-column: 1 / -1;
+      background: var(--bg-strong);
+      border-bottom: 1px solid var(--bg-border);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing-lg);
+      gap: var(--spacing-xl);
+      z-index: 100;
+    }
+
+    .topnav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--label-title);
+      text-decoration: none;
+    }
+
+    .topnav-logo svg { width: 28px; height: 28px; }
+
+    .topnav-links {
+      display: flex;
+      gap: var(--spacing-xs);
+      list-style: none;
+    }
+
+    .topnav-links a {
+      color: var(--label-base);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--rounded-lg);
+      transition: background 0.15s var(--ease-out-quart);
+    }
+
+    .topnav-links a:hover { background: var(--bg-base-hover); }
+
+    .topnav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .btn-workspace {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--bg-sub);
+      border: 1px solid var(--bg-border);
+      color: var(--label-base);
+      padding: 6px 12px;
+      border-radius: var(--rounded-lg);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-workspace:hover { background: var(--bg-base-hover); }
+
+    .credit-display {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--label-title);
+    }
+
+    .credit-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gradient-credit);
+    }
+
+    .nav-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--rounded-lg);
+      border: none;
+      background: transparent;
+      color: var(--label-soft);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      position: relative;
+    }
+    .nav-icon-btn:hover { background: var(--bg-base-hover); }
+
+    .nav-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .badge-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-support-base);
+      border-radius: 50%;
+      border: 2px solid var(--bg-strong);
+    }
+
+    /* ===== Side Nav ===== */
+    .sidenav {
+      background: var(--bg-strong);
+      border-right: 1px solid var(--bg-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: var(--spacing-lg);
+      gap: var(--spacing-xs);
+    }
+
+    .sidenav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: var(--spacing-sm) var(--spacing-sm);
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      color: var(--label-soft);
+      font-size: 0.625rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
+      width: 48px;
+    }
+    .sidenav-item:hover { background: var(--bg-base-hover); color: var(--label-base); }
+    .sidenav-item.active { color: var(--accent-base); }
+    .sidenav-item svg { width: 24px; height: 24px; }
+
+    /* ===== Left Panel ===== */
+    .left-panel {
+      background: var(--bg-base);
+      border-right: 1px solid var(--bg-border);
+      padding: var(--spacing-lg);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-lg);
+    }
+
+    /* Tabs */
+    .panel-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      background: var(--bg-sub);
+      border-radius: var(--rounded-xl);
+    }
+
+    .panel-tab {
+      width: 48px;
+      height: 40px;
+      border-radius: var(--rounded-lg);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .panel-tab.active { background: var(--bg-base-hover); }
+    .panel-tab:hover { background: var(--bg-base-hover); }
+    .panel-tab svg, .panel-tab img { width: 24px; height: 24px; }
+
+    /* Section header */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--label-title);
+    }
+
+    .section-actions {
+      display: flex;
+      gap: var(--spacing-xs);
+    }
+
+    .icon-btn-sm {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-md);
+      border: none;
+      background: transparent;
+      color: var(--label-soft);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .icon-btn-sm:hover { background: var(--bg-base-hover); }
+
+    /* Upload area */
+    .upload-area {
+      border: 1px dashed var(--bg-border-strong);
+      border-radius: var(--rounded-xl);
+      padding: var(--spacing-2xl) var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .upload-area:hover { border-color: var(--label-muted); background: var(--bg-translucent); }
+
+    .upload-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--label-muted);
+    }
+
+    .upload-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--label-base);
+    }
+
+    .upload-subtitle {
+      font-size: 0.75rem;
+      color: var(--label-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Form fields */
+    .form-group { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--label-title);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .info-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--label-muted);
+    }
+
+    .text-input {
+      background: var(--bg-sub);
+      border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-xl);
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      color: var(--label-base);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .text-input::placeholder { color: var(--label-placeholder); }
+    .text-input:focus { border-color: var(--accent-base); }
+
+    /* Segmented control */
+    .segmented-control {
+      display: flex;
+      background: var(--bg-sub);
+      border-radius: var(--rounded-xl);
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .segment {
+      flex: 1;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--label-soft);
+      border: none;
+      background: transparent;
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .segment.active { background: var(--bg-base-hover); color: var(--label-title); }
+    .segment:hover:not(.active) { color: var(--label-base); }
+
+    /* Select */
+    .select-field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-sub);
+      border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-xl);
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      color: var(--label-title);
+      cursor: pointer;
+    }
+
+    /* Toggle */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle {
+      width: 40px;
+      height: 22px;
+      border-radius: var(--rounded-full);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .toggle.on { background: var(--accent-base); }
+    .toggle.off { background: var(--bg-shade); }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      transition: transform 0.2s;
+    }
+    .toggle.on::after { transform: translateX(18px); }
+
+    /* Pose buttons */
+    .pose-row {
+      display: flex;
+      gap: var(--spacing-sm);
+      align-items: center;
+    }
+
+    .pose-btn {
+      padding: 8px 16px;
+      border-radius: var(--rounded-lg);
+      border: 1px solid var(--bg-border);
+      background: transparent;
+      color: var(--label-soft);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pose-btn.active { background: var(--bg-base-hover); color: var(--label-title); border-color: var(--label-muted); }
+    .pose-btn:hover:not(.active) { background: var(--bg-translucent); }
+
+    .pose-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--bg-border);
+    }
+
+    /* License */
+    .license-row {
+      display: flex;
+      border-radius: var(--rounded-xl);
+      overflow: hidden;
+      border: 1px solid var(--bg-border);
+    }
+    .license-opt {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .license-opt.inactive { background: transparent; color: var(--label-soft); }
+    .license-opt.active { background: var(--bg-base-hover); color: var(--label-title); }
+
+    /* Bottom bar */
+    .panel-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid var(--bg-border);
+    }
+
+    .gen-info {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      font-size: 0.875rem;
+      color: var(--label-soft);
+    }
+
+    .gen-cost {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .coin-sm {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gradient-credit);
+    }
+
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: var(--rounded-xl);
+      background: linear-gradient(90deg, var(--accent-base) 0%, var(--accent-support-highlight) 100%);
+      color: var(--accent-label);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      transition: opacity 0.15s;
+    }
+    .btn-generate:hover { opacity: 0.9; }
+
+    /* ===== Viewport ===== */
+    .viewport {
+      background: var(--bg-sub);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .viewport-topbar {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-md);
+    }
+
+    .viewport-icons {
+      display: flex;
+      gap: var(--spacing-xs);
+    }
+
+    .printability-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--bg-shade);
+      border-radius: var(--rounded-lg);
+      padding: 6px 14px;
+      font-size: 0.875rem;
+      color: var(--label-base);
+      margin-left: var(--spacing-lg);
+    }
+
+    .warning-icon { color: var(--semantic-warning-base); }
+
+    .viewport-canvas {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .model-placeholder {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle at 50% 60%, #2a2a2a 0%, var(--bg-sub) 70%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .model-emoji {
+      font-size: 200px;
+      filter: grayscale(1) brightness(0.8);
+    }
+
+    .bool-tool-btn {
+      position: absolute;
+      bottom: 80px;
+      right: var(--spacing-lg);
+      padding: 8px 16px;
+      background: var(--bg-shade);
+      border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-lg);
+      color: var(--label-base);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Toolbar */
+    .viewport-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-sm);
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      background: var(--bg-shade);
+      border-radius: var(--rounded-xl);
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .toolbar-btn {
+      position: relative;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      color: var(--label-soft);
+      font-size: 0.875rem;
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .toolbar-btn:hover { background: var(--bg-base-hover); color: var(--label-base); }
+    .toolbar-btn.active { background: var(--bg-base-hover); color: var(--accent-base); }
+
+    .toolbar-btn .sup-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      font-size: 0.5rem;
+      font-weight: 700;
+      color: var(--accent-base);
+    }
+
+    .toolbar-btn-accent {
+      padding: 8px 14px;
+      border: none;
+      background: var(--accent-base);
+      color: var(--accent-label);
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toolbar-download {
+      padding: 8px 12px;
+      border: none;
+      background: var(--accent-base);
+      color: var(--accent-label);
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Share button with dropdown */
+    .share-wrapper {
+      position: relative;
+    }
+
+    .toolbar-btn-share {
+      position: relative;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      color: var(--label-soft);
+      font-size: 0.875rem;
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .toolbar-btn-share:hover { background: var(--bg-base-hover); color: var(--label-base); }
+    .toolbar-btn-share .sup-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      font-size: 0.5rem;
+      font-weight: 700;
+      color: var(--accent-base);
+    }
+
+    /* Share dropdown */
+    .share-dropdown {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: var(--bg-sub);
+      border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-2xl);
+      padding: var(--spacing-sm);
+      min-width: 260px;
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+    }
+
+    .share-dropdown.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .share-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--rounded-xl);
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .share-dropdown-item:hover { background: var(--bg-base-hover); }
+
+    .share-dropdown-item .item-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--label-soft);
+      flex-shrink: 0;
+    }
+
+    .share-dropdown-item .item-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--label-title);
+      flex: 1;
+    }
+
+    .share-dropdown-item .item-reward {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .reward-cash {
+      color: #4cd964;
+    }
+
+    .reward-coin {
+      color: var(--semantic-warning-highlight);
+    }
+
+    .reward-icon-cash {
+      width: 20px;
+      height: 20px;
+    }
+
+    .reward-icon-coin {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gradient-credit);
+      flex-shrink: 0;
+    }
+
+    /* Bottom bar */
+    .viewport-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-top: 1px solid var(--bg-border);
+    }
+
+    .reuse-prompt {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-size: 0.875rem;
+      color: var(--label-soft);
+      cursor: pointer;
+    }
+
+    .vote-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    /* ===== Right Panel ===== */
+    .right-panel {
+      background: var(--bg-base);
+      border-left: 1px solid var(--bg-border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-panel-header {
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-md) var(--spacing-lg);
+      gap: var(--spacing-sm);
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--label-base);
+      font-size: 0.875rem;
+      outline: none;
+    }
+    .search-input::placeholder { color: var(--label-muted); }
+
+    .btn-upload {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--accent-base);
+      color: var(--accent-label);
+      border: none;
+      padding: 6px 14px;
+      border-radius: var(--rounded-lg);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .right-panel-icons {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-bottom: 1px solid var(--bg-border);
+    }
+
+    .right-panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--spacing-sm);
+    }
+
+    .gen-card {
+      padding: var(--spacing-sm);
+      border-radius: var(--rounded-xl);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .gen-card:hover { background: var(--bg-base-hover); }
+
+    .gen-card-title {
+      font-size: 0.75rem;
+      color: var(--label-soft);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .gen-card-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xs);
+    }
+
+    .gen-thumb {
+      aspect-ratio: 1;
+      background: var(--bg-shade);
+      border-radius: var(--rounded-lg);
+    }
+
+    .gen-card-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-xs) 0;
+    }
+
+    .right-panel-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-top: 1px solid var(--bg-border);
+      font-size: 0.75rem;
+      color: var(--label-muted);
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .page-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-md);
+      border: none;
+      background: transparent;
+      color: var(--label-soft);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+    .page-btn:hover { background: var(--bg-base-hover); }
+
+    /* Sidenav bottom item */
+    .sidenav-bottom {
+      margin-top: auto;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* Overlay for closing dropdown */
+    .dropdown-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      display: none;
+    }
+    .dropdown-overlay.open { display: block; }
+
+    /* SVG icons inline helper */
+    svg { display: block; }
+
+    /* ===== Share Modal — Two-Step Flow ===== */
+    .share-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .share-modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .share-modal {
+      background: var(--bg-base);
+      border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-2xl);
+      width: 765px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
+      transform: scale(0.96) translateY(12px);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    .share-modal-overlay.open .share-modal {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* Header */
+    .share-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--bg-border);
+      position: relative;
+    }
+    .share-modal-header h2 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--label-title);
+    }
+    .share-modal-back {
+      position: absolute;
+      left: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-md);
+      border: none;
+      background: transparent;
+      color: var(--label-base);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .share-modal-back:hover { background: var(--bg-base-hover); }
+    .share-modal-back.visible { display: flex; }
+
+    .share-modal-next {
+      position: absolute;
+      right: 16px;
+      border: none;
+      background: transparent;
+      color: var(--accent-base);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--rounded-md);
+      transition: all 0.15s;
+    }
+    .share-modal-next:hover { background: var(--accent-bg); }
+
+    .share-modal-close {
+      position: absolute;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-md);
+      border: 1px solid var(--bg-border);
+      background: transparent;
+      color: var(--label-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .share-modal-close:hover { background: var(--bg-base-hover); color: var(--label-base); }
+
+    /* Body — step container */
+    .share-modal-body {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Top section: preview + templates */
+    .share-top {
+      display: flex;
+      height: 460px;
+      flex-shrink: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* === STEP 1 — Choose Template === */
+    .step1-preview {
+      flex: 0 0 60%;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-sub);
+    }
+    .template-bg {
+      position: absolute;
+      inset: 0;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+    }
+    .template-bg.active { opacity: 1; }
+    .template-model {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .template-model .model-3d {
+      font-size: 180px;
+      filter: drop-shadow(0 12px 40px rgba(0,0,0,0.5));
+      animation: rotateModel 8s linear infinite;
+    }
+    @keyframes rotateModel {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    .step1-templates {
+      flex: 1;
+      border-left: 1px solid var(--bg-border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .step1-templates::-webkit-scrollbar { width: 4px; }
+    .step1-templates::-webkit-scrollbar-track { background: transparent; }
+    .step1-templates::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 2px; }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 2px;
+    }
+    .template-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px 4px 8px;
+      border-radius: var(--rounded-lg);
+      transition: background 0.15s;
+      gap: 6px;
+    }
+    .template-card:hover { background: var(--bg-base-hover); }
+    .template-card.active { background: var(--bg-base-hover); }
+
+    .template-card-thumb {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--rounded-lg);
+      overflow: hidden;
+      position: relative;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .template-card.active .template-card-thumb {
+      border-color: var(--accent-base);
+    }
+    .template-card-bg {
+      position: absolute;
+      inset: 0;
+    }
+    .template-card-model {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+    }
+    .template-card-name {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--label-soft);
+      text-align: center;
+      transition: color 0.15s;
+    }
+    .template-card.active .template-card-name {
+      color: var(--accent-base);
+      font-weight: 600;
+    }
+
+    /* === Bottom Share Section === */
+    .share-bottom {
+      border-top: 1px solid var(--bg-border);
+      padding: 20px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .share-bottom-cols {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+    }
+    .share-bottom-link {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+    .share-bottom-divider {
+      width: 1px;
+      background: var(--bg-border);
+      align-self: stretch;
+    }
+    .share-bottom-channels {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Promo */
+    .share-promo {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(197,249,85,0.18);
+      border-radius: var(--rounded-xl);
+      background: linear-gradient(135deg, rgba(197,249,85,0.05) 0%, transparent 100%);
+    }
+    .share-promo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--rounded-lg);
+      background: var(--accent-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.875rem;
+    }
+    .share-promo-text {
+      font-size: 0.75rem;
+      color: var(--label-soft);
+      line-height: 1.5;
+    }
+    .share-promo-text strong { color: var(--accent-base); font-weight: 600; }
+    .share-promo-text a { color: var(--label-base); text-decoration: underline; text-underline-offset: 2px; }
+    .share-promo-text a:hover { color: var(--accent-base); }
+
+    /* Dividers */
+    .share-divider { height: 1px; background: var(--bg-border); }
+
+    /* Section labels */
+    .share-section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--label-title);
+    }
+
+    /* Link */
+    .share-link-header { display: flex; align-items: center; justify-content: space-between; }
+    .shortened-toggle { display: flex; align-items: center; gap: 6px; }
+    .shortened-toggle span { font-size: 0.7rem; color: var(--label-muted); }
+    .toggle-sm {
+      width: 32px; height: 18px;
+      border-radius: var(--rounded-full); border: none;
+      cursor: pointer; position: relative; transition: background 0.2s;
+    }
+    .toggle-sm.on { background: var(--accent-base); }
+    .toggle-sm.off { background: var(--bg-shade); }
+    .toggle-sm::after {
+      content: ""; position: absolute; top: 2px; left: 2px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: white; transition: transform 0.2s;
+    }
+    .toggle-sm.on::after { transform: translateX(14px); }
+
+    .share-link-row { display: flex; gap: 8px; align-items: center; }
+    .share-link-input {
+      flex: 1; min-width: 0;
+      background: var(--bg-sub); border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-lg); padding: 8px 12px;
+      font-size: 0.8rem; color: var(--label-soft);
+      font-family: inherit; outline: none; transition: border-color 0.15s;
+    }
+    .share-link-input:focus { border-color: var(--accent-base); }
+
+    .btn-copy-link {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 8px 14px; min-width: 100px; border: none; border-radius: var(--rounded-lg);
+      background: var(--accent-base); color: var(--accent-label);
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .btn-copy-link:hover { background: var(--accent-base-hover); box-shadow: 0 2px 8px rgba(197,249,85,0.25); }
+
+    /* Email */
+    .share-email-row { display: flex; gap: 8px; align-items: center; }
+    .share-email-input {
+      flex: 1; min-width: 0;
+      background: var(--bg-sub); border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-lg); padding: 8px 12px;
+      font-size: 0.8rem; color: var(--label-base);
+      font-family: inherit; outline: none; transition: border-color 0.15s;
+    }
+    .share-email-input::placeholder { color: var(--label-placeholder); }
+    .share-email-input:focus { border-color: var(--accent-base); }
+    .btn-add-email {
+      padding: 8px 12px; border: 1px solid var(--bg-border);
+      border-radius: var(--rounded-lg); background: transparent;
+      color: var(--label-base); font-size: 0.8rem; font-weight: 500;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .btn-add-email:hover { background: var(--bg-base-hover); border-color: var(--bg-border-strong); }
+    .btn-send-email {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 8px 14px; min-width: 100px; border: none; border-radius: var(--rounded-lg);
+      background: var(--accent-base); color: var(--accent-label);
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; white-space: nowrap; transition: all 0.15s;
+    }
+    .btn-send-email:hover { background: var(--accent-base-hover); box-shadow: 0 2px 8px rgba(197,249,85,0.25); }
+
+    /* Social icons */
+    .share-social-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+    .social-icon-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 5px; cursor: pointer;
+    }
+    .social-icon-circle {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
+    }
+    .social-icon-circle:hover { transform: translateY(-4px) scale(1.12); }
+    .social-icon-circle:active { transform: translateY(-1px) scale(1.04); }
+    .social-icon-circle svg { width: 26px; height: 26px; }
+    .social-icon-label {
+      font-size: 0.625rem; font-weight: 500;
+      color: var(--label-muted); text-align: center; transition: color 0.15s;
+    }
+    .social-icon-item:hover .social-icon-label { color: var(--label-base); }
+
+    .social-icon-circle.x { background: #1a1a1a; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
+    .social-icon-circle.whatsapp { background: #25D366; }
+    .social-icon-circle.telegram { background: #2AABEE; }
+    .social-icon-circle.facebook { background: #1877F2; }
+    .social-icon-circle.reddit { background: #FF4500; }
+    .social-icon-circle.discord { background: #5865F2; }
+    .social-icon-circle.email { background: #EA4335; }
+    .social-icon-circle.x:hover { box-shadow: 0 6px 20px rgba(255,255,255,0.12); }
+    .social-icon-circle.whatsapp:hover { box-shadow: 0 6px 20px rgba(37,211,102,0.35); }
+    .social-icon-circle.telegram:hover { box-shadow: 0 6px 20px rgba(42,171,238,0.35); }
+    .social-icon-circle.facebook:hover { box-shadow: 0 6px 20px rgba(24,119,242,0.35); }
+    .social-icon-circle.reddit:hover { box-shadow: 0 6px 20px rgba(255,69,0,0.35); }
+    .social-icon-circle.discord:hover { box-shadow: 0 6px 20px rgba(88,101,242,0.35); }
+    .social-icon-circle.email:hover { box-shadow: 0 6px 20px rgba(234,67,53,0.35); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Top Nav -->
+    <nav class="topnav">
+      <a href="#" class="topnav-logo">
+        <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#c5f955"/><text x="14" y="18" text-anchor="middle" font-size="14" font-weight="700" fill="#000">M</text></svg>
+        Meshy
+      </a>
+      <ul class="topnav-links">
+        <li><a href="#">Community</a></li>
+        <li><a href="#">API &darr;</a></li>
+        <li><a href="#">Learn &darr;</a></li>
+        <li><a href="#">Resources &darr;</a></li>
+      </ul>
+      <div class="topnav-right">
+        <button class="btn-workspace">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+          Workspace
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 7L2 4h6L5 7z"/></svg>
+        </button>
+        <div class="credit-display">
+          <div class="credit-icon"></div>
+          52,110
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="5" stroke="#c5f955" stroke-width="1.5"/><path d="M8 5v6M5 8h6" stroke="#c5f955" stroke-width="1.5"/></svg>
+        </div>
+        <button class="nav-icon-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor"/><rect x="2" y="11" width="5" height="5" rx="1" fill="currentColor"/><rect x="11" y="2" width="5" height="5" rx="1" fill="currentColor"/><rect x="11" y="11" width="5" height="5" rx="1" fill="currentColor"/></svg>
+        </button>
+        <button class="nav-icon-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 6v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="nav-icon-btn">
+          <span class="badge-dot"></span>
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M14 6a5 5 0 10-10 0c0 5-2 6-2 6h14s-2-1-2-6zM10.5 15a1.5 1.5 0 01-3 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <div class="nav-avatar"></div>
+      </div>
+    </nav>
+
+    <!-- Side Nav -->
+    <aside class="sidenav">
+      <a href="#" class="sidenav-item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        Assets
+      </a>
+      <a href="#" class="sidenav-item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="9" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 16l5-4 4 3 4-5 5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Image
+      </a>
+      <a href="#" class="sidenav-item active">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3L3 8v8l9 5 9-5V8l-9-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 8l9 5m0 0l9-5m-9 5v8" stroke="currentColor" stroke-width="1.5"/></svg>
+        Model
+      </a>
+      <a href="#" class="sidenav-item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="12" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 14h6M9 17h6M9 11h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Print
+      </a>
+      <a href="#" class="sidenav-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+        Animate
+      </a>
+      <div class="sidenav-bottom">
+        <a href="#" class="sidenav-item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21c-1.5-1.5-6-5.5-6-10a6 6 0 1112 0c0 4.5-4.5 8.5-6 10z" stroke="currentColor" stroke-width="1.5"/></svg>
+          Vote
+        </a>
+      </div>
+    </aside>
+
+    <!-- Left Panel -->
+    <section class="left-panel">
+      <div class="panel-tabs">
+        <button class="panel-tab active">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#c5f955" stroke-width="1.5"/><circle cx="8" cy="9" r="2" stroke="#c5f955" stroke-width="1.5"/></svg>
+        </button>
+        <button class="panel-tab">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" fill="#f6992b"/><circle cx="16" cy="8" r="3" fill="#ff3e8f"/><circle cx="12" cy="15" r="3" fill="#c5f955"/></svg>
+        </button>
+        <button class="panel-tab">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3L3 8v8l9 5 9-5V8l-9-5z" stroke="#c5f955" stroke-width="1.5" fill="rgba(197,249,85,0.15)"/></svg>
+        </button>
+      </div>
+
+      <div class="section-header">
+        <span class="section-title">Image</span>
+        <div class="section-actions">
+          <button class="icon-btn-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="6" y="6" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          <button class="icon-btn-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M8 6v4M6 8h4" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          <button class="icon-btn-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        </div>
+      </div>
+
+      <div class="upload-area">
+        <svg class="upload-icon" viewBox="0 0 40 40" fill="none"><rect x="5" y="5" width="30" height="30" rx="6" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="16" r="3" stroke="currentColor" stroke-width="2"/><path d="M5 28l8-7 6 5 6-8 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="upload-title">Click / Drag & Drop / Paste Image</span>
+        <span class="upload-subtitle">Supported Formats: .png, .jpg, .jpeg, .webp<br/>Max size: 20MB</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Name <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <input type="text" class="text-input" placeholder="Give your generation a name" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Model Type <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <div class="segmented-control">
+          <button class="segment active">Standard</button>
+          <button class="segment">Low Poly (Beta)</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">AI Model <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <div class="select-field">
+          Meshy 6
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 8L2 4h8L6 8z"/></svg>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <label class="form-label">Image Enhancement <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <button class="toggle on"></button>
+      </div>
+
+      <div class="toggle-row">
+        <label class="form-label">Multi-view (Beta) <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <button class="toggle off"></button>
+      </div>
+
+      <div class="toggle-row">
+        <label class="form-label">Pose <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <button class="toggle off"></button>
+      </div>
+
+      <div class="pose-row">
+        <button class="pose-btn active">A-Pose</button>
+        <button class="pose-btn">T-Pose</button>
+        <div class="pose-divider"></div>
+        <button class="pose-btn">Custom</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">License <svg class="info-icon" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M7 6v4M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></label>
+        <div class="license-row">
+          <button class="license-opt inactive">CC BY 4.0</button>
+          <button class="license-opt active">Private</button>
+        </div>
+      </div>
+
+      <div class="panel-bottom">
+        <div class="gen-info">
+          <span>1 min</span>
+          <div class="gen-cost">
+            <div class="coin-sm"></div>
+            20
+          </div>
+        </div>
+        <button class="btn-generate">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L4 9h4v7l5-7h-4V2z" fill="currentColor"/></svg>
+          Generate
+        </button>
+      </div>
+    </section>
+
+    <!-- Viewport -->
+    <main class="viewport">
+      <div class="viewport-topbar">
+        <div class="viewport-icons">
+          <button class="icon-btn-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          <button class="icon-btn-sm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="6" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        </div>
+        <div class="printability-badge">
+          Printability
+          <svg width="16" height="16" viewBox="0 0 16 16" class="warning-icon"><path d="M8 2L1 14h14L8 2z" fill="currentColor"/><path d="M8 7v3M8 12v.5" stroke="#000" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <div class="viewport-canvas">
+        <div class="model-placeholder">
+          <span class="model-emoji">&#129421;</span>
+        </div>
+        <button class="bool-tool-btn">Bool Tool</button>
+      </div>
+
+      <div class="viewport-toolbar">
+        <div class="toolbar-group">
+          <button class="toolbar-btn">
+            <span class="sup-badge">x8</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1112 0 6 6 0 01-12 0z" stroke="currentColor" stroke-width="1.2"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="toolbar-btn-accent">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4l2-4z" fill="currentColor"/></svg>
+            Texture
+          </button>
+          <button class="toolbar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </button>
+          <button class="toolbar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M4 6L1 3h6L4 6z"/></svg>
+          </button>
+
+          <!-- Share button -->
+          <div class="share-wrapper">
+            <button class="toolbar-btn-share" id="shareBtn" onclick="toggleShareDropdown()">
+              <span class="sup-badge">+250</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.5v6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5.5 5L8 2.5 10.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="9" width="10" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M4 6L1 3h6L4 6z"/></svg>
+            </button>
+
+            <!-- Share Dropdown -->
+            <div class="share-dropdown" id="shareDropdown">
+              <div class="share-dropdown-item" onclick="handleShare('share')">
+                <svg class="item-icon" viewBox="0 0 20 20" fill="none">
+                  <path d="M11 3l5 4-5 4V8.5C7 8.5 4 10 3 14c0-5 3-8 8-8V3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="item-label">Share</span>
+                <span class="item-reward reward-cash">+$20</span>
+                <svg class="reward-icon-cash" viewBox="0 0 20 20" fill="none">
+                  <rect x="1" y="5" width="18" height="10" rx="2" fill="#2d6b2d" stroke="#4cd964" stroke-width="1"/>
+                  <text x="10" y="12" text-anchor="middle" font-size="7" font-weight="700" fill="#4cd964">$</text>
+                </svg>
+              </div>
+
+              <div class="share-dropdown-item" onclick="handleShare('publish')">
+                <svg class="item-icon" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 2a8 8 0 100 16 8 8 0 000-16z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="item-label">Publish to Community</span>
+                <span class="item-reward reward-coin">+50</span>
+                <div class="reward-icon-coin"></div>
+              </div>
+
+              <div class="share-dropdown-item" onclick="handleShare('post')">
+                <svg class="item-icon" viewBox="0 0 20 20" fill="none">
+                  <path d="M4 4h12v10H4zM4 7l8 4 8-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="item-label">Post to Earn</span>
+                <span class="item-reward reward-coin">+200</span>
+                <div class="reward-icon-coin"></div>
+              </div>
+            </div>
+          </div>
+
+          <button class="toolbar-download">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="toolbar-group" style="margin-left: var(--spacing-sm);">
+          <button class="toolbar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="toolbar-btn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="viewport-bottom">
+        <div class="reuse-prompt">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10l4-8 4 8H2z" stroke="currentColor" stroke-width="1.2"/></svg>
+          Reuse prompt
+          <div style="width:20px;height:20px;border-radius:50%;background:var(--gradient-credit);margin-left:8px;"></div>
+        </div>
+        <div class="vote-actions">
+          <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2l1.5 3 3.5.5-2.5 2.5.5 3.5L7 10l-3 1.5.5-3.5L2 5.5 5.5 5 7 2z" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2l1.5 3 3.5.5-2.5 2.5.5 3.5L7 10l-3 1.5.5-3.5L2 5.5 5.5 5 7 2z" stroke="currentColor" stroke-width="1.2" transform="rotate(180 7 7)"/></svg></button>
+          <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M7 5v4M5 7h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Panel -->
+    <aside class="right-panel">
+      <div class="right-panel-header">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="var(--label-muted)" stroke-width="1.2"/><path d="M11 11l3 3" stroke="var(--label-muted)" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <input type="text" class="search-input" placeholder="Search my gener..." />
+        <button class="btn-upload">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Upload
+        </button>
+      </div>
+
+      <div class="right-panel-icons">
+        <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="4" height="4" rx="0.5" fill="currentColor"/><rect x="8" y="2" width="4" height="4" rx="0.5" fill="currentColor"/><rect x="2" y="8" width="4" height="4" rx="0.5" fill="currentColor"/><rect x="8" y="8" width="4" height="4" rx="0.5" fill="currentColor"/></svg></button>
+        <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+        <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h10M2 10h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+        <button class="icon-btn-sm"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v8M3 6h8" stroke="currentColor" stroke-width="1.2"/></svg></button>
+      </div>
+
+      <div class="right-panel-content">
+        <!-- Gen Card 1 -->
+        <div class="gen-card">
+          <div class="gen-card-title">Jolly Jester Jig</div>
+          <div class="gen-card-images">
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #4a3520, #8b6540);"></div>
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #2a2a2a, #4a4a4a);"></div>
+          </div>
+        </div>
+
+        <!-- Gen Card 2 -->
+        <div class="gen-card">
+          <div class="gen-card-title">Jolly Jester Jig</div>
+          <div class="gen-card-images">
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #4a3520, #8b6540);"></div>
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #2a2a2a, #4a4a4a);"></div>
+          </div>
+        </div>
+
+        <!-- Gen Card 3 -->
+        <div class="gen-card">
+          <div class="gen-card-title">Jolly Jester Jig</div>
+          <div class="gen-card-images">
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #4a3520, #8b6540);"></div>
+            <div class="gen-thumb" style="background: linear-gradient(135deg, #2a2a2a, #4a4a4a);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel-footer">
+        <div class="pagination">
+          <button class="page-btn">&laquo;</button>
+          <button class="page-btn">&lsaquo;</button>
+        </div>
+        <span>1/2</span>
+        <div class="pagination">
+          <button class="page-btn">&rsaquo;</button>
+          <button class="page-btn">&raquo;</button>
+        </div>
+        <span>20</span>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><path d="M5 7L2 4h6L5 7z"/></svg>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Overlay to close dropdown -->
+  <div class="dropdown-overlay" id="dropdownOverlay" onclick="closeShareDropdown()"></div>
+
+  <!-- Share Modal — Two-Step -->
+  <div class="share-modal-overlay" id="shareModalOverlay" onclick="if(event.target===this)closeShareModal()">
+    <div class="share-modal">
+      <!-- Header -->
+      <div class="share-modal-header">
+        <h2>Share and Win</h2>
+        <button class="share-modal-close" onclick="closeShareModal()">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M11 3L3 11M3 3l8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="share-modal-body">
+        <!-- Top: Preview + Templates -->
+        <div class="share-top">
+          <div class="step1-preview" id="step1Preview">
+            <div class="template-bg active" data-tpl="0" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);"></div>
+            <div class="template-bg" data-tpl="1" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);"></div>
+            <div class="template-bg" data-tpl="2" style="background:linear-gradient(135deg,#0d0d0d,#1a1a1a,#2d2d2d);"></div>
+            <div class="template-bg" data-tpl="3" style="background:linear-gradient(135deg,#2d1b69,#11998e);"></div>
+            <div class="template-bg" data-tpl="4" style="background:linear-gradient(135deg,#e44d26,#f7d046);"></div>
+            <div class="template-bg" data-tpl="5" style="background:linear-gradient(135deg,#0c0c1d,#1b4332);"></div>
+            <div class="template-bg" data-tpl="6" style="background:linear-gradient(135deg,#4a0e4e,#2b5876);"></div>
+            <div class="template-bg" data-tpl="7" style="background:linear-gradient(135deg,#141e30,#243b55);"></div>
+            <div class="template-bg" data-tpl="8" style="background:linear-gradient(135deg,#1f1c2c,#928dab);"></div>
+            <div class="template-bg" data-tpl="9" style="background:linear-gradient(135deg,#c5f955,#11998e);"></div>
+            <div class="template-model"><span class="model-3d">🦍</span></div>
+          </div>
+          <div class="step1-templates">
+            <div style="padding:10px 10px 8px;font-size:0.75rem;font-weight:600;color:var(--label-title);text-align:center;border-bottom:1px solid var(--bg-border);">Template</div>
+            <div class="template-grid" id="templateGrid"></div>
+          </div>
+        </div>
+
+        <!-- Bottom: Share options -->
+        <div class="share-bottom">
+          <div class="share-promo">
+            <div class="share-promo-icon">🎁</div>
+            <div class="share-promo-text"></div>
+          </div>
+          <!-- Row 1: By Link (left) | By Email (right) -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:end;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="share-link-header">
+                <span class="share-section-label">By Link</span>
+                <div class="shortened-toggle">
+                  <span>Shortened URL</span>
+                  <button class="toggle-sm on" onclick="this.classList.toggle('on');this.classList.toggle('off');"></button>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <input type="text" class="share-link-input" value="https://www.meshy.ai/s/La9b7G" readonly style="flex:1;" />
+                <button class="btn-copy-link" onclick="copyLink()">
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M9 5c1.5 0 2 .5 2 2v3c0 1.5-.5 2-2 2H6c-1.5 0-2-.5-2-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><rect x="3" y="2" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+                  Copy Link
+                </button>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <span class="share-section-label">By Email</span>
+              <div style="display:flex;gap:8px;">
+                <input type="email" class="share-email-input" placeholder="Enter email address" style="flex:1;" />
+                <button class="btn-send-email">
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7l10-5-3 10-2-4-5-1z" fill="currentColor"/></svg>
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Row 2: Share to social - left aligned -->
+          <div style="display:flex;align-items:center;gap:18px;">
+            <span class="share-section-label" style="white-space:nowrap;">Share to</span>
+            <div class="share-social-grid" style="gap:22px;flex-wrap:nowrap;">
+              <div class="social-icon-item"><button class="social-icon-circle x" onclick="shareToSocial('x')"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#fff"/></svg></button><span class="social-icon-label">X</span></div>
+              <div class="social-icon-item"><button class="social-icon-circle whatsapp" onclick="shareToSocial('whatsapp')"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#fff"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" stroke="rgba(255,255,255,.3)" stroke-width="1" fill="none"/></svg></button><span class="social-icon-label">WhatsApp</span></div>
+              <div class="social-icon-item"><button class="social-icon-circle telegram" onclick="shareToSocial('telegram')"><svg viewBox="0 0 24 24"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z" fill="#fff"/></svg></button><span class="social-icon-label">Telegram</span></div>
+              <div class="social-icon-item"><button class="social-icon-circle facebook" onclick="shareToSocial('facebook')"><svg viewBox="0 0 24 24"><path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0014.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z" fill="#fff"/></svg></button><span class="social-icon-label">Facebook</span></div>
+              <div class="social-icon-item"><button class="social-icon-circle reddit" onclick="shareToSocial('reddit')"><svg viewBox="0 0 24 24"><path d="M14.5 13.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5.224-.5.5-.5.5.224.5.5zm-4 0c0 .276-.224.5-.5.5s-.5-.224-.5-.5.224-.5.5-.5.5.224.5.5z" fill="#fff"/><path d="M16 11.5c0-.828-.672-1.5-1.5-1.5-.398 0-.76.156-1.03.41C12.43 9.64 11.06 9.13 9.58 9.08l.94-2.98 2.1.5c.03.55.48.98 1.03.98.57 0 1.03-.46 1.03-1.03s-.46-1.03-1.03-1.03c-.4 0-.75.23-.92.57L10.35 5.5c-.1-.02-.2.04-.23.14l-1.07 3.4c-1.56.03-3 .54-4.06 1.33A1.494 1.494 0 003.5 10c-.828 0-1.5.672-1.5 1.5 0 .58.33 1.08.81 1.33-.02.12-.03.25-.03.37 0 2.49 2.97 4.5 6.22 4.5 3.25 0 6.22-2.01 6.22-4.5 0-.13-.01-.25-.03-.37.48-.25.81-.75.81-1.33z" fill="#fff"/><path d="M7 16c.75.75 2 1 3 1s2.25-.25 3-1" stroke="#FF4500" stroke-width=".75" stroke-linecap="round" fill="none"/></svg></button><span class="social-icon-label">Reddit</span></div>
+              <div class="social-icon-item"><button class="social-icon-circle discord" onclick="shareToSocial('discord')"><svg viewBox="0 0 24 24"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 00-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 00-4.8 0c-.14-.34-.35-.76-.54-1.09-.01-.02-.04-.03-.07-.03-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65.03.01.06 0 .07-.02.4-.55.76-1.13 1.07-1.74.02-.04 0-.08-.04-.09-.57-.22-1.11-.48-1.64-.78-.04-.02-.04-.08-.01-.11.11-.08.22-.17.33-.25.02-.02.05-.02.07-.01 3.44 1.57 7.15 1.57 10.55 0 .02-.01.05-.01.07.01.11.09.22.17.33.26.04.03.04.09-.01.11-.52.31-1.07.56-1.64.78-.04.01-.05.06-.04.09.32.61.68 1.19 1.07 1.74.02.03.05.03.07.02 1.72-.53 3.45-1.33 5.24-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z" fill="#fff"/></svg></button><span class="social-icon-label">Discord</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleShareDropdown() {
+      const dropdown = document.getElementById('shareDropdown');
+      const overlay = document.getElementById('dropdownOverlay');
+      const isOpen = dropdown.classList.contains('open');
+
+      if (isOpen) {
+        closeShareDropdown();
+      } else {
+        dropdown.classList.add('open');
+        overlay.classList.add('open');
+      }
+    }
+
+    function closeShareDropdown() {
+      document.getElementById('shareDropdown').classList.remove('open');
+      document.getElementById('dropdownOverlay').classList.remove('open');
+    }
+
+    function handleShare(type) {
+      closeShareDropdown();
+
+      switch (type) {
+        case 'share':
+          openShareModal();
+          break;
+        case 'publish':
+          console.log('Publish to Community — user earns +50 coins');
+          break;
+        case 'post':
+          console.log('Post to Earn — user earns +200 coins');
+          break;
+      }
+    }
+
+    // Share Modal — Two-Step Flow
+    const templates = [
+      { name: 'Nebula', bg: 'linear-gradient(135deg,#0f0c29,#302b63,#24243e)' },
+      { name: 'Deep Sea', bg: 'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)' },
+      { name: 'Obsidian', bg: 'linear-gradient(135deg,#0d0d0d,#1a1a1a,#2d2d2d)' },
+      { name: 'Aurora', bg: 'linear-gradient(135deg,#2d1b69,#11998e)' },
+      { name: 'Sunset', bg: 'linear-gradient(135deg,#e44d26,#f7d046)' },
+      { name: 'Forest', bg: 'linear-gradient(135deg,#0c0c1d,#1b4332)' },
+      { name: 'Amethyst', bg: 'linear-gradient(135deg,#4a0e4e,#2b5876)' },
+      { name: 'Midnight', bg: 'linear-gradient(135deg,#141e30,#243b55)' },
+      { name: 'Lavender', bg: 'linear-gradient(135deg,#1f1c2c,#928dab)' },
+      { name: 'Lime', bg: 'linear-gradient(135deg,#c5f955,#11998e)' },
+    ];
+    let activeTpl = 0;
+
+    // Build template grid
+    const grid = document.getElementById('templateGrid');
+    templates.forEach((t, i) => {
+      const card = document.createElement('div');
+      card.className = 'template-card' + (i === 0 ? ' active' : '');
+      card.dataset.tpl = i;
+      card.innerHTML = `
+        <div class="template-card-thumb">
+          <div class="template-card-bg" style="background:${t.bg};"></div>
+          <div class="template-card-model">🦍</div>
+        </div>
+        <span class="template-card-name">${t.name}</span>`;
+      card.addEventListener('click', () => selectTemplate(i));
+      grid.appendChild(card);
+    });
+
+    function selectTemplate(idx) {
+      activeTpl = idx;
+      // Update cards
+      document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.template-card[data-tpl="${idx}"]`).classList.add('active');
+      // Update preview backgrounds in both steps
+      document.querySelectorAll('.template-bg').forEach(bg => {
+        bg.classList.toggle('active', bg.dataset.tpl == idx);
+      });
+    }
+
+    function openShareModal() {
+      document.getElementById('shareModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeShareModal() {
+      document.getElementById('shareModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Copy link
+    function copyLink() {
+      const input = document.querySelector('.share-link-input');
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.querySelector('.btn-copy-link');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      });
+    }
+
+    function shareToSocial(platform) {
+      console.log('Share to:', platform);
+    }
+
+    // Toggle switches
+    document.querySelectorAll('.toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('on');
+        btn.classList.toggle('off');
+      });
+    });
+
+    // Segment controls
+    document.querySelectorAll('.segmented-control').forEach(control => {
+      control.querySelectorAll('.segment').forEach(seg => {
+        seg.addEventListener('click', () => {
+          control.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+          seg.classList.add('active');
+        });
+      });
+    });
+
+    // Pose buttons
+    document.querySelectorAll('.pose-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pose-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // License toggle
+    document.querySelectorAll('.license-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.license-opt').forEach(o => { o.classList.remove('active'); o.classList.add('inactive'); });
+        opt.classList.remove('inactive');
+        opt.classList.add('active');
+      });
+    });
+
+    // Close dropdown on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeShareDropdown(); closeShareModal(); }
+    });
+  </script>
+</body>
+</html>
